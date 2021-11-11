@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}Locations Disponibles{% endblock %}
+
+{% block body %}
+  {% if locations %}
+    <table id="locations" class="table table-striped">
+      <thead>
+        <tr>
+          <th>Location</th>
+          <th>Description</th>
+          <th>Actions</th>
+
+        </tr>
+      </thead>
+      <tbody>
+        {% for location in locations %}
+          <tr>
+            <td>{{ location.titre }}</td>
+            <td>{{ location.description }}</td>
+            <td>
+              <a href="/location/{{ location.id }}" class="btn btn-dark">Afficher</a>
+              <a href="/location/edit/{{ location.id }}" class="btn btn-success">Modifier</a>
+              <a href="#" class="btn btn-danger delete-location" data-name="{{ location.titre }}" data-id="{{ location.id }}">Supprimer</a>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    
+  
+    {% else %}
+    <p>Aucune Location à Afficher</p>
+  {% endif %}
+  {% block javascript %}
+  <script src="/js/main.js"></script>
+{% endblock %}
+{% endblock %}
+
+

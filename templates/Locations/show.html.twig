@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ location.titre }}{% endblock %}
+
+{% block body %}
+ <h1>{{ location.titre }}</h1>
+ <p>{{ location.description }}</p>
+ <hr>
+ <a href="/">Retourner</a>
+{% endblock %}
