@@ -10,6 +10,7 @@
         "composer/package-versions-deprecated": "1.11.99.4",
         "doctrine/doctrine-bundle": "^2.4",
         "doctrine/doctrine-migrations-bundle": "^3.2",
+        "doctrine/migrations": "^3.3",
         "doctrine/orm": "^2.10",
         "sensio/framework-extra-bundle": "^6.2",
         "symfony/asset": "5.3.*",
@@ -21,11 +22,14 @@
         "symfony/maker-bundle": "^1.34",
         "symfony/proxy-manager-bridge": "5.3.*",
         "symfony/runtime": "5.3.*",
+        "symfony/security-bundle": "5.3.*",
         "symfony/twig-bundle": "5.3.*",
+        "symfony/validator": "5.3.*",
         "symfony/web-server-bundle": "4.*",
         "symfony/yaml": "5.3.*",
         "twig/extra-bundle": "^2.12|^3.0",
-        "twig/twig": "^2.12|^3.0"
+        "twig/twig": "^2.12|^3.0",
+        "vich/uploader-bundle": "^1.18"
     },
     "config": {
         "optimize-autoloader": true,
@@ -69,5 +73,8 @@
             "allow-contrib": false,
             "require": "5.3.*"
         }
+    },
+    "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^3.4"
     }
 }

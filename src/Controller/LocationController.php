@@ -16,7 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class LocationController extends AbstractController{
     /**
-     * @Route("/",name="location_list")
+     * @Route("/location",name="location_list")
      * @Method({"GET"})
      */
     public function index(){
@@ -25,10 +25,9 @@ class LocationController extends AbstractController{
         return $this->render('Locations/index.html.twig',array('locations'=>$locations));
 
     }
-    /**
-     * @Route("/location/delete/{id}")
-     * @Method({"DELETE"})
-     */
+    #[Route("/location/delete/{id}")]
+      
+     
     public function delete(Request $request,$id){
         $location=$this->getDoctrine()->getRepository(Location::class)->find($id);
         $entityManager=$this->getDoctrine()->getManager();
