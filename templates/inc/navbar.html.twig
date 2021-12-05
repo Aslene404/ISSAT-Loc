@@ -17,13 +17,45 @@
         <a href="/location/new" class="nav-link">Nouvelle Location</a>
         </li>
     
-         <li class="nav-item">
+         
+      <li class="nav-item">
+        <a href="" class="nav-link"></a> 
+      </li>
+      <li class="nav-item">
+        <a href="" class="nav-link"></a> 
+      </li>
+      <li class="nav-item">
+        <a href="" class="nav-link"></a> 
+      </li>
+      <li class="nav-item">
+        <a href="" class="nav-link"></a> 
+      </li> 
+      <li class="nav-item">
+        <a href="" class="nav-link"></a> 
+      </li>
+      <li class="nav-item">
+        <a href="" class="nav-link"></a> 
+      </li>
+      <li class="nav-item">
+        <a href="" class="nav-link"></a> 
+      </li>
+      <li class="nav-item">
+        <a href="" class="nav-link"></a> 
+      </li> 
+      
+      <li class="nav-item">
+         <p class="nav-link">Connecté en tant que {{ app.user.firstname }} <br>Role: {{ app.user.roles[1] }}</p>
+         
+         
+      </li>
+      <li class="nav-item">
         <a href="{{ path('app_logout') }}" class="nav-link">Déconnexion</a> 
       </li>
       
       
+      
       {% else %}
-      <li class="nav-item">
+      <li class="nav-item ">
         <a href="/" class="nav-link">Acceuil</a>
          
        <li class="nav-item">
