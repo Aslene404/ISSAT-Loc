@@ -43,17 +43,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $firstname;
 
     /**
-     * @ORM\Column(type="string", length=20, nullable=true)
+     * @ORM\Column(type="string", length=20)
      */
     private $lastname;
 
     /**
-     * @ORM\Column(type="smallint", nullable=true)
+     * @ORM\Column(type="bigint", unique=true)
      */
     private $cin;
 
     /**
-     * @ORM\Column(type="smallint")
+     * @ORM\Column(type="bigint")
      */
     private $mobile;
 
