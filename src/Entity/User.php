@@ -48,12 +48,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $lastname;
 
     /**
-     * @ORM\Column(type="bigint", unique=true)
+     * @ORM\Column(type="string", length=20 , unique=true)
      */
     private $cin;
 
     /**
-     * @ORM\Column(type="bigint")
+     * @ORM\Column(type="string", length=20)
      */
     private $mobile;
 
@@ -192,7 +192,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getCin(): ?int
+    public function getCin(): ?string
     {
         return $this->cin;
     }
@@ -204,7 +204,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getMobile(): ?int
+    public function getMobile(): ?string
     {
         return $this->mobile;
     }

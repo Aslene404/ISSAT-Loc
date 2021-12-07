@@ -3,8 +3,32 @@
 {% block title %}{{ location.titre }}{% endblock %}
 
 {% block body %}
+
  <h1>{{ location.titre }}</h1>
- <p>{{ location.description }}</p>
  <hr>
+ <h2>Disponible à partir de {{ location.dispodate|date('Y-m-d') }}</h2> 
+ <hr>
+ <h3>Crée Par : <br>{{ location.owner.firstname }} {{ location.owner.lastname }}</h3>
+ <hr>
+ <h4>Capacité Maximale : <br>{{ location.capacity }}</h4>
+<hr>
+ <p>Description <br>{{ location.description }}</p>
+ <hr>
+ <p>Membres : </p>
+ {# {% for member in location.members %}
+          <tr>
+            <td>{{ member.firstname }} {{ member.lastname }}</td>
+            <td>{{ member.mobile }}</td>
+            
+          </tr>
+        {% endfor %}
+        <hr> #}
+ <p>Photos : </p>
+ {% for photo in location.photos %}
+          <tr>
+            <img src="{{ photo }}" width="500" height="600">
+            
+          </tr>
+        {% endfor %}
  <a href="/location">Retourner</a>
 {% endblock %}
