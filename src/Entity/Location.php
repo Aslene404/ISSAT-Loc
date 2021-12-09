@@ -46,13 +46,15 @@ class Location
      */
     private $members;
     /**
-     * @ORM\Column(type="array")
+     * @ORM\OneToMany(targetEntity="App\Entity\Images", mappedBy="locations",cascade={"persist"})
      */
-    private $photos;
+    private $images;
 
     public function __construct()
     {
         $this->members = new ArrayCollection();
+        
+        $this->images = new ArrayCollection();
     }
 
 
@@ -113,17 +115,7 @@ class Location
         return $this;
     }
 
-    public function getPhotos(): ?array
-    {
-        return $this->photos;
-    }
-
-    public function setPhotos(array $photos): self
-    {
-        $this->photos = $photos;
-
-        return $this;
-    }
+    
 
     /**
      * @return Collection|User[]
@@ -149,6 +141,39 @@ class Location
             // set the owning side to null (unless already changed)
             if ($member->getLocation() === $this) {
                 $member->setLocation(null);
+            }
+        }
+
+        return $this;
+    }
+
+    
+
+    
+    /**
+     * @return Collection|Images[]
+     */
+    public function getImages(): Collection
+    {
+        return $this->images;
+    }
+
+    public function addImage(Images $image): self
+    {
+        if (!$this->images->contains($image)) {
+            $this->images[] = $image;
+            $image->setLocations($this);
+        }
+
+        return $this;
+    }
+
+    public function removeImage(Images $image): self
+    {
+        if ($this->images->removeElement($image)) {
+            // set the owning side to null (unless already changed)
+            if ($image->getLocations() === $this) {
+                $image->setLocations(null);
             }
         }
 

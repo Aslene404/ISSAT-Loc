@@ -14,21 +14,31 @@
 <hr>
  <p>Description <br>{{ location.description }}</p>
  <hr>
- <p>Membres : </p>
- {# {% for member in location.members %}
+ {# <p>Membres : </p>
+ {% if location.members %}
+ {% for member in location.members %}
           <tr>
             <td>{{ member.firstname }} {{ member.lastname }}</td>
             <td>{{ member.mobile }}</td>
             
           </tr>
         {% endfor %}
-        <hr> #}
+        <hr>
+        {% else %}
+        <p>Aucun Membre à Afficher</p> 
+        {% endif %} #}
  <p>Photos : </p>
- {% for photo in location.photos %}
+ {% if location.images %}
+ {% for image in location.images %}
           <tr>
-            <img src="{{ photo }}" width="500" height="600">
+          
+            <img src="{{ asset('/uploads/'~image.name) }}" width="300" alt="" >
             
           </tr>
         {% endfor %}
+        {% else %}
+        <p>Aucune Photo à Afficher</p> 
+        {% endif %}
+ <br>       
  <a href="/location">Retourner</a>
 {% endblock %}
