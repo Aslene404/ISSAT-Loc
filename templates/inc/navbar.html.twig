@@ -13,9 +13,17 @@
          <li class="nav-item">
         <a href="/location" class="nav-link">Liste De Locations</a>
       </li>
+      {% if app.user.roles[0]=="ROLE_MANAGER" %}
       <li class="nav-item">
         <a href="/location/new" class="nav-link">Nouvelle Location</a>
         </li>
+        {% endif %}
+        {% if app.user.roles[0]=="ROLE_ADMIN" %}
+      <li class="nav-item">
+        <a href="/admin" class="nav-link"> Tableau De Bord 
+</a> 
+      </li>
+      {% endif %}
     
          
       <li class="nav-item">
@@ -44,10 +52,11 @@
       </li> 
       
       <li class="nav-item">
-         <p class="nav-link">Connecté en tant que {{ app.user.firstname }} <br>Role: {{ app.user.roles[0] }}</p>
+         <p class="nav-link">Connecté en tant que {{ app.user.firstname }} </p>
          
          
       </li>
+       
       <li class="nav-item">
         <a href="{{ path('app_logout') }}" class="nav-link">Déconnexion</a> 
       </li>

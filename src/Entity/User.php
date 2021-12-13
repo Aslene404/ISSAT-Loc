@@ -29,7 +29,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @ORM\Column(type="json")
      */
-    private $roles=['ROLE_'];
+    private $roles=['ROLE_MANAGER'];
 
     /**
      * @var string The hashed password
@@ -66,6 +66,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="date")
      */
     private $birthday;
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Location", inversedBy="members")
+     */
+    private $locations;
 
     
     
@@ -248,6 +252,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setIsVerified(bool $isVerified): self
     {
         $this->isVerified = $isVerified;
+
+        return $this;
+    }
+
+    public function getLocations(): ?Location
+    {
+        return $this->locations;
+    }
+
+    public function setLocations(?Location $locations): self
+    {
+        $this->locations = $locations;
 
         return $this;
     }

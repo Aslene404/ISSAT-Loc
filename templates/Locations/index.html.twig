@@ -10,7 +10,9 @@
         <tr>
           <th>Location</th>
           <th>Description</th>
+          <th>Photos</th>
           <th>Actions</th>
+          
 
         </tr>
       </thead>
@@ -19,11 +21,27 @@
           <tr>
             <td>{{ location.titre }}</td>
             <td>{{ location.description }}</td>
+            
+            <td>
+            {% if location.images %}
+ {% for image in location.images %}
+          
+          
+            <img src="{{ asset('/uploads/'~image.name) }}" width="150" alt="" >
+            
+          
+        {% endfor %}
+        {% endif %}</td>
+
+           
             <td>
               <a href="/location/{{ location.id }}" class="btn btn-dark">Afficher</a>
+               {% if location.owner.id==app.user.id %}
               <a href="/location/edit/{{ location.id }}" class="btn btn-success">Modifier</a>
               <a href="#" class="btn btn-danger delete-location" data-name="{{ location.titre }}" data-id="{{ location.id }}">Supprimer</a>
+              {% endif %}
             </td>
+            
           </tr>
         {% endfor %}
       </tbody>

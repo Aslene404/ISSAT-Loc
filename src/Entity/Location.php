@@ -42,7 +42,7 @@ class Location
      */
     private $capacity;
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="location")
+     * @ORM\OneToMany(targetEntity="App\Entity\User", mappedBy="locations",cascade={"persist"})
      */
     private $members;
     /**
