@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Security\Core\Security;
+use MercurySeries\FlashyBundle\FlashyNotifier;
 
 
 
@@ -39,8 +40,21 @@ class LocationController extends AbstractController
     public function index()
     {
         //return new Response('<html><body>Hello</body></html>');
+        
         $locations = $this->getDoctrine()->getRepository(Location::class)->findAll();
         return $this->render('Locations/index.html.twig', array('locations' => $locations));
+
+    }
+    /**
+     * @Route("/location/notif",name="location_notif")
+     * @Method({"GET"})
+     */
+    public function notify(FlashyNotifier $flashy)
+    {
+        //return new Response('<html><body>Hello</body></html>');
+        $flashy->success('Demande envoyée vers Le proprietaire de cette location');
+        return $this->redirectToRoute('location_list');
+        
 
     }
     #[Route("/location/delete/{id}")]

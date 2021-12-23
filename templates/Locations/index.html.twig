@@ -40,6 +40,9 @@
               <a href="/location/edit/{{ location.id }}" class="btn btn-success">Modifier</a>
               <a href="#" class="btn btn-danger delete-location" data-name="{{ location.titre }}" data-id="{{ location.id }}">Supprimer</a>
               {% endif %}
+              {% if location.owner.id!=app.user.id %}
+              <a href="/location/notif" class="btn btn-info">Demander une place</a>
+              {% endif %}
             </td>
             
           </tr>
