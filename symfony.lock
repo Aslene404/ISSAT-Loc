@@ -112,6 +112,9 @@
     "mercuryseries/flashy-bundle": {
         "version": "v4.0.0"
     },
+    "nesbot/carbon": {
+        "version": "2.55.2"
+    },
     "nikic/php-parser": {
         "version": "v4.13.1"
     },

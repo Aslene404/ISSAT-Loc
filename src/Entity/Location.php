@@ -50,11 +50,17 @@ class Location
      */
     private $images;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Demande::class, mappedBy="location")
+     */
+    private $demandes;
+
     public function __construct()
     {
         $this->members = new ArrayCollection();
         
         $this->images = new ArrayCollection();
+        $this->demandes = new ArrayCollection();
     }
 
 
@@ -129,7 +135,7 @@ class Location
     {
         if (!$this->members->contains($member)) {
             $this->members[] = $member;
-            $member->setLocation($this);
+            $member->setLocations($this);
         }
 
         return $this;
@@ -174,6 +180,36 @@ class Location
             // set the owning side to null (unless already changed)
             if ($image->getLocations() === $this) {
                 $image->setLocations(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Demande[]
+     */
+    public function getDemandes(): Collection
+    {
+        return $this->demandes;
+    }
+
+    public function addDemande(Demande $demande): self
+    {
+        if (!$this->demandes->contains($demande)) {
+            $this->demandes[] = $demande;
+            $demande->setLocation($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDemande(Demande $demande): self
+    {
+        if ($this->demandes->removeElement($demande)) {
+            // set the owning side to null (unless already changed)
+            if ($demande->getLocation() === $this) {
+                $demande->setLocation(null);
             }
         }
 

@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}Vos Notifications{% endblock %}
+
+{% block body %}
+  {% if demandes %}
+    <table id="demandes" class="table table-striped">
+      <thead>
+        <tr>
+          <th>Demande</th>
+          
+          <th>Date</th>
+          <th>Actions</th>
+          
+
+        </tr>
+      </thead>
+      <tbody>
+      
+        {% for demande in demandes %}
+        {% if demande.isAccept %}
+        <tr style="background-color:rgba(70, 130, 180, 0.6)">
+
+            <td>{{ demande.sender.firstname }} {{ demande.sender.lastname }} a accepté votre demande de location pour la maison {{ demande.location.titre }}
+            {% if demande.location.images %}
+            {% for image in demande.location.images %}
+          
+          
+            <img src="{{ asset('/uploads/'~image.name) }}" width="150" alt="" >
+            
+          
+        {% endfor %}
+        {% endif %}
+</td>
+            <td>{{ demande.date|date('d-m-Y') }}</td>
+            
+            
+
+           
+            <td>
+              <form action="/location/notif_list/delete/{{demande.id}}" method="get">
+              <input type="submit" value="Ignorer" class="btn btn-danger delete-location">
+              </form>
+            </td>
+            
+          </tr>
+        {% else %}
+        
+          <tr>
+
+            <td>{{ demande.sender.firstname }} {{ demande.sender.lastname }} veut louer la maison {{ demande.location.titre }}
+            {% if demande.location.images %}
+            {% for image in demande.location.images %}
+          
+          
+            <img src="{{ asset('/uploads/'~image.name) }}" width="150" alt="" >
+            
+          
+        {% endfor %}
+        {% endif %}
+</td>
+            <td>{{ demande.date|date('d-m-Y') }}</td>
+            
+            
+            <td>
+            <form action="/location/notif_list/update/{{demande.id}}" method="get">
+           <input type="submit" value="Accepter" class="btn btn-success">
+           </form>
+           </td>
+            <td>
+              <form action="/location/notif_list/delete/{{demande.id}}" method="get">
+              <input type="submit" value="Ignorer" class="btn btn-danger delete-location">
+              </form>
+            </td>
+            
+          </tr>
+          {% endif %}
+        {% endfor %}
+        
+      </tbody>
+    </table>
+    
+  
+    {% else %}
+    <p>Aucune Demande à Afficher</p>
+  {% endif %}
+  {% block javascript %}
+  <script src="/js/main.js"></script>
+{% endblock %}
+{% endblock %}
+
+

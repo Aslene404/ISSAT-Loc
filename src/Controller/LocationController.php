@@ -3,6 +3,9 @@ namespace App\Controller;
 
 use App\Entity\Location;
 use App\Entity\Images;
+use App\Entity\Demande;
+use App\Entity\User;
+
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -13,7 +16,7 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Security\Core\Security;
 use MercurySeries\FlashyBundle\FlashyNotifier;
-
+use Carbon\Carbon;
 
 
 
@@ -46,14 +49,51 @@ class LocationController extends AbstractController
 
     }
     /**
-     * @Route("/location/notif",name="location_notif")
+     * @Route("/location/notif/{id}",name="location_notif")
      * @Method({"GET"})
      */
-    public function notify(FlashyNotifier $flashy)
+    public function notify(FlashyNotifier $flashy,$id)
     {
         //return new Response('<html><body>Hello</body></html>');
+        $demande = new Demande();
+        $user = $this->security->getUser();
+        $demande->setSender($user);
+        $location = new Location();
+        $location = $this->getDoctrine()->getRepository(Location::class)->find($id);
+        $demande->setReceiver($location->getOwner());
+        $demande->setLocationId($id);
+        
+        $demande->setDate(new \DateTime('now'));
+        $demande->setLocation($location);
+        $demande->setIsAccept(false);
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($demande);
+        $entityManager->flush();
         $flashy->success('Demande envoyée vers Le proprietaire de cette location');
         return $this->redirectToRoute('location_list');
+        
+
+    }
+    /**
+     * @Route("/location/notif_list",name="location_notif_list")
+     * @Method({"GET"})
+     */
+    public function notif_list()
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        
+        $user = $this->security->getUser();
+        
+        $query = $entityManager->createQuery(
+            'SELECT p
+            FROM App\Entity\Demande p
+            WHERE p.receiver =:user
+            ORDER BY p.date ASC'
+        )->setParameter('user', $user);
+
+        // returns an array of Product objects
+        $demandes= $query->getResult();
+        return $this->render('Notifications/list.html.twig', array('demandes' => $demandes));
         
 
     }
@@ -68,7 +108,59 @@ function delete(Request $request, $id)
     $response = new Response();
     $response->send();
 }
+/**
+     * @Route("/location/notif_list/delete/{id}",name="location_notif_list_delete")
+     * @Method({"GET"})
+     */
 
+function delete_notif(Request $request, $id)
+    {
+    $demande = $this->getDoctrine()->getRepository(Demande::class)->find($id);
+    $entityManager = $this->getDoctrine()->getManager();
+    $entityManager->remove($demande);
+    $entityManager->flush();
+    $response = new Response();
+    $response->send();
+    return $this->redirectToRoute('location_notif_list');
+}
+/**
+     * @Route("/location/notif_list/update/{id}",name="location_notif_list_update")
+     * @Method({"GET"})
+     */
+
+    function update_notif(FlashyNotifier $flashy,Request $request, $id)
+    {
+        $old_r=new User();
+        $old_s=new User();
+        $demande = $this->getDoctrine()->getRepository(Demande::class)->find($id);
+        $entityManager = $this->getDoctrine()->getManager();
+        $old_r=$demande->getReceiver();
+        $old_s=$demande->getSender();
+        $demande->setReceiver($old_s);
+        $demande->setSender($old_r);
+        $demande->setIsAccept(true);
+        $demande->setDate(new \DateTime('now'));
+        
+        $location = new Location();
+        $location = $this->getDoctrine()->getRepository(Location::class)->find($demande->getLocationId());
+        
+        if (count($location->getMembers())==$location->getCapacity())
+        {
+            $entityManager->refresh($location);
+            $entityManager->refresh($demande);
+            $flashy->error('Capacité maximale de la maison est depassée');
+        }
+
+        
+else{
+    $location->addMember($old_s);
+    $entityManager->flush();
+    $response = new Response();
+    $response->send();
+    $flashy->success('Utilisateur est maintenant locataire de cette maison');
+}
+    return $this->redirectToRoute('location_notif_list');
+}
 // /**
 //  * @Route("/location/save")
 //  */
