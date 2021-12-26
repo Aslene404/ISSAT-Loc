@@ -5,6 +5,8 @@ use App\Entity\Location;
 use App\Entity\Images;
 use App\Entity\Demande;
 use App\Entity\User;
+use App\Entity\Message;
+use App\Form\RegistrationFormType;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -161,6 +163,87 @@ else{
 }
     return $this->redirectToRoute('location_notif_list');
 }
+/**
+     * @Route("/location/messages/{id}", name="messages")
+     * @Method({"GET"})
+     */
+    public function message_list($id)
+    {
+
+
+        
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $user = $this->getDoctrine()->getRepository(User::class)->find($id);
+        $user_c = $this->security->getUser();
+
+        
+        
+        $query = $entityManager->createQuery(
+            'SELECT p
+            FROM App\Entity\Message p
+            WHERE p.receiver =:user or p.sender =:user
+            ORDER BY p.date ASC'
+        )->setParameter('user', $user);
+
+        // returns an array of Product objects
+        $messages= $query->getResult();
+        return $this->render('messages/list.html.twig', array('messages' => $messages));
+        
+
+    }
+    /**
+     * @Route("/location/contacts",name="contacts")
+     * @Method({"GET"})
+     */
+    public function contact_list()
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        
+        $user = $this->security->getUser();
+        
+        $query = $entityManager->createQuery(
+            'SELECT p
+            FROM App\Entity\User p
+            WHERE p.id <>:user '
+        )->setParameter('user', $user->getId());
+
+        // returns an array of Product objects
+        $users= $query->getResult();
+        return $this->render('users/list.html.twig', array('users' => $users));
+        
+
+    }
+    /**
+     * @Route("/location/messages/add/{id}",name="message_add")
+     * @Method({"GET","POST"})
+     */
+    public function message_add(Request $request,FlashyNotifier $flashy,$id,)
+    {   $message = new Message();
+        $form = $this->createFormBuilder($message)
+            ->add('content', TextareaType::class, array('attr' => array('placeholder' => 'Votre Message','class' => 'form-control')))
+            
+            ->add('save', SubmitType::class, array('label' => 'Envoyer', 'attr' => array('class' => 'btn btn-primary mt-3')))
+            ->getForm();
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            
+    
+            $message = $form->getData();
+            $user = $this->getDoctrine()->getRepository(User::class)->find($id);
+            $user_c = $this->security->getUser();
+            $message->setSender($user_c);
+            $message->setReceiver($user);
+            $message->setDate(new \DateTimeImmutable('now'));
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($message);
+            $entityManager->flush();
+            $flashy->success('Message envoyé avec success');
+            return $this->redirectToRoute('contacts');
+        }
+        return $this->render("messages/new.html.twig", array('form' => $form->createView()));
+
+    }
 // /**
 //  * @Route("/location/save")
 //  */
@@ -283,5 +366,6 @@ public function deleteImage(Images $image, Request $request){
         return new JsonResponse(['error' => 'Token Invalide'], 400);
     }
 }
+
 
 }

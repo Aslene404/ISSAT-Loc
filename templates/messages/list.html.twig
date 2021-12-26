@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}Boite de réception{% endblock %}
+
+{% block body %}
+  {% if messages %}
+    <table id="messages" class="table table-striped">
+      
+      <tbody>
+      
+        {% for message in messages %}
+        {% if message.receiver==app.user %}
+        <tr class="table-primary">
+            <td>{{ message.date|format_datetime() }} === > {{ message.content }}</td>
+            
+          </tr>
+          {% endif %} 
+          {% if message.sender==app.user %}
+          <tr align="right" class="table-dark">
+            
+            <td>{{ message.content }} < === {{ message.date|format_datetime() }}</td>
+            
+          </tr>
+            
+          {% endif %} 
+          {% endfor %}
+      </tbody>
+    </table>
+    
+    
+          
+
+    {% else %}
+    <p>Aucun Message à Afficher</p>
+  {% endif %}
+  
+
+  {% block javascript %}
+  <script src="/js/main.js"></script>
+{% endblock %}
+{% endblock %}
+
+

@@ -1,0 +1,13 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Modifier Location{% endblock %}
+
+{% block body %}
+ {{ form_start(form) }}
+  {{ form_widget(form) }}
+ {{ form_end(form) }}
+
+{% endblock %}
+{% block javascripts %}
+    <script src="{{ asset('js/images.js') }}"></script>
+{% endblock %}

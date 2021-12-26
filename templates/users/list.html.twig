@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+
+{% block title %}Vos Contacts{% endblock %}
+
+{% block body %}
+  {% if users %}
+    <table id="users" class="table table-striped">
+      <thead>
+        <tr>
+          
+          
+          <th>Nom</th>
+          <th>Prénom</th>
+          <th>Rôle dans la platforme</th>
+          <th>Email</th>
+          <th>Actions</th>
+          
+
+        </tr>
+      </thead>
+      <tbody>
+      
+        {% for user in users %}
+        
+        
+        
+        
+          <tr>
+
+            
+
+            <td>{{ user.firstname }}</td>
+            <td>{{ user.lastname }}</td>
+            <td>{{ user.roles[0] }}</td>
+            <td>{{ user.email }}</td>
+
+            
+            
+            <td>
+            <form action="/location/messages/{{user.id}}" method="get">
+           <input type="submit" value="Consulter les messages" class="btn btn-primary">
+           </form>
+           </td>
+            <td>
+            <form action="/location/messages/add/{{user.id}}" method="GET">
+            
+           <input type="submit" name="Envoyer" value="Envoyer un message" class="btn btn-success">
+           </form>
+           <td>
+            
+          </tr>
+          
+        {% endfor %}
+        
+      </tbody>
+    </table>
+    
+  
+    {% else %}
+    <p>Aucun Contact à Afficher</p>
+  {% endif %}
+  {% block javascript %}
+  <script src="/js/main.js"></script>
+{% endblock %}
+{% endblock %}
+
+
