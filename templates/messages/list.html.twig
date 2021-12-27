@@ -4,6 +4,7 @@
 {% block title %}Boite de réception{% endblock %}
 
 {% block body %}
+<a href="/location/contacts" class="nav-link"> < Contacts</a>
   {% if messages %}
     <table id="messages" class="table table-striped">
       
@@ -25,6 +26,7 @@
             
           {% endif %} 
           {% endfor %}
+
       </tbody>
     </table>
     

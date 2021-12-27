@@ -47,6 +47,11 @@ class Demande
      */
     private $isAccept;
 
+    /**
+     * @ORM\Column(type="smallint", nullable=true)
+     */
+    private $ack;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -120,6 +125,18 @@ class Demande
     public function setIsAccept(bool $isAccept): self
     {
         $this->isAccept = $isAccept;
+
+        return $this;
+    }
+
+    public function getAck(): ?int
+    {
+        return $this->ack;
+    }
+
+    public function setAck(?int $ack): self
+    {
+        $this->ack = $ack;
 
         return $this;
     }

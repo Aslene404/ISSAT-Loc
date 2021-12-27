@@ -238,6 +238,20 @@ else{
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($message);
             $entityManager->flush();
+            $demande = new Demande();
+            
+            $demande->setSender($user_c);
+            
+            $demande->setReceiver($user);
+            
+            $location = $this->getDoctrine()->getRepository(Location::class)->find('4');
+            $demande->setDate(new \DateTime('now'));
+            $demande->setLocation($location);
+            $demande->setIsAccept(true);    
+            $demande->setAck(69);
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->persist($demande);
+            $entityManager->flush();
             $flashy->success('Message envoyé avec success');
             return $this->redirectToRoute('contacts');
         }
