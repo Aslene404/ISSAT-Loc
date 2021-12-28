@@ -19,6 +19,9 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Security\Core\Security;
 use MercurySeries\FlashyBundle\FlashyNotifier;
 use Carbon\Carbon;
+use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Email;
+use \Mailjet\Resources;
 
 
 
@@ -54,7 +57,7 @@ class LocationController extends AbstractController
      * @Route("/location/notif/{id}",name="location_notif")
      * @Method({"GET"})
      */
-    public function notify(FlashyNotifier $flashy,$id)
+    public function notify(FlashyNotifier $flashy,$id,MailerInterface $mailer)
     {
         //return new Response('<html><body>Hello</body></html>');
         $demande = new Demande();
@@ -71,6 +74,29 @@ class LocationController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
         $entityManager->persist($demande);
         $entityManager->flush();
+        $mj = new \Mailjet\Client('d334e66ed2f7cdce808c166ec3a0facb','9bac980f8d57b26ebe3ea8a0fd71ec9c',true,['version' => 'v3.1']);
+  $body = [
+    'Messages' => [
+      [
+        'From' => [
+          'Email' => "aslenerazor@gmail.com",
+          'Name' => "Issat Co-Location"
+        ],
+        'To' => [
+          [
+            'Email' => $demande->getReceiver()->getEmail(),
+            'Name' => $demande->getReceiver()->getFirstname(),
+          ]
+        ],
+        'Subject' => "Nouvelle Notification.",
+        'TextPart' => "My first Mailjet email",
+        'HTMLPart' => "<h3>Vous avez une nouvelle notification sur notre platforme Issat Co-Location vous pouvez consulter vos notfications <a href='http://127.0.0.1:8000/location/notif_list/'>Ici</a>!</h3>",
+        'CustomID' => "AppGettingStartedTest"
+      ]
+    ]
+  ];
+  $response = $mj->post(Resources::$Email, ['body' => $body]);
+  $response->success() && var_dump($response->getData());
         $flashy->success('Demande envoyée vers Le proprietaire de cette location');
         return $this->redirectToRoute('location_list');
         
@@ -90,7 +116,7 @@ class LocationController extends AbstractController
             'SELECT p
             FROM App\Entity\Demande p
             WHERE p.receiver =:user
-            ORDER BY p.date ASC'
+            ORDER BY p.date DESC'
         )->setParameter('user', $user);
 
         // returns an array of Product objects
@@ -156,9 +182,33 @@ function delete_notif(Request $request, $id)
         
 else{
     $location->addMember($old_s);
+
     $entityManager->flush();
-    $response = new Response();
-    $response->send();
+    $mj = new \Mailjet\Client('d334e66ed2f7cdce808c166ec3a0facb','9bac980f8d57b26ebe3ea8a0fd71ec9c',true,['version' => 'v3.1']);
+  $body = [
+    'Messages' => [
+      [
+        'From' => [
+          'Email' => "aslenerazor@gmail.com",
+          'Name' => "Issat Co-Location"
+        ],
+        'To' => [
+          [
+            'Email' => $demande->getReceiver()->getEmail(),
+            'Name' => $demande->getReceiver()->getFirstname(),
+          ]
+        ],
+        'Subject' => "Nouvelle Notification.",
+        'TextPart' => "My first Mailjet email",
+        'HTMLPart' => "<h3>Vous avez une nouvelle notification sur notre platforme Issat Co-Location vous pouvez consulter vos notifications <a href='http://127.0.0.1:8000/location/notif_list/'>Ici</a>!</h3>",
+        'CustomID' => "AppGettingStartedTest"
+      ]
+    ]
+  ];
+  $response = $mj->post(Resources::$Email, ['body' => $body]);
+  $response->success() && var_dump($response->getData());
+    
+    
     $flashy->success('Utilisateur est maintenant locataire de cette maison');
 }
     return $this->redirectToRoute('location_notif_list');
@@ -218,7 +268,7 @@ else{
      * @Route("/location/messages/add/{id}",name="message_add")
      * @Method({"GET","POST"})
      */
-    public function message_add(Request $request,FlashyNotifier $flashy,$id,)
+    public function message_add(Request $request,FlashyNotifier $flashy,$id,MailerInterface $mailer)
     {   $message = new Message();
         $form = $this->createFormBuilder($message)
             ->add('content', TextareaType::class, array('attr' => array('placeholder' => 'Votre Message','class' => 'form-control')))
@@ -252,6 +302,29 @@ else{
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($demande);
             $entityManager->flush();
+            $mj = new \Mailjet\Client('d334e66ed2f7cdce808c166ec3a0facb','9bac980f8d57b26ebe3ea8a0fd71ec9c',true,['version' => 'v3.1']);
+  $body = [
+    'Messages' => [
+      [
+        'From' => [
+          'Email' => "aslenerazor@gmail.com",
+          'Name' => "Issat Co-Location"
+        ],
+        'To' => [
+          [
+            'Email' => $message->getReceiver()->getEmail(),
+            'Name' => $message->getReceiver()->getFirstname(),
+          ]
+        ],
+        'Subject' => "Nouveau Message.",
+        'TextPart' => "My first Mailjet email",
+        'HTMLPart' => "<h3>Vous avez une nouvelle notification sur notre platforme Issat Co-Location vous pouvez consulter vos messages <a href='http://127.0.0.1:8000/location/contacts/'>Ici</a>!</h3>",
+        'CustomID' => "AppGettingStartedTest"
+      ]
+    ]
+  ];
+  $response = $mj->post(Resources::$Email, ['body' => $body]);
+  $response->success() && var_dump($response->getData());
             $flashy->success('Message envoyé avec success');
             return $this->redirectToRoute('contacts');
         }
