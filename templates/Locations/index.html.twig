@@ -11,6 +11,7 @@
           <th>Location</th>
           <th>Description</th>
           <th>Capacité</th>
+          <th>Prix par place</th>
           <th>Photos</th>
           <th>Actions</th>
           
@@ -29,6 +30,8 @@
             {% else %}
             <td>{{ location.members|length }} / {{ location.capacity }}</td>  
             {% endif %}
+            {# {% set price_xd = ({{ location.price }}/({{ location.members|length }}+1)) %} #}
+            <td >{{ location.price / (location.members|length +1)}} DT</td>
             <td>
             {% if location.images %}
  {% for image in location.images %}
@@ -48,7 +51,7 @@
               <a href="#" class="btn btn-danger delete-location" data-name="{{ location.titre }}" data-id="{{ location.id }}">Supprimer</a>
               {% endif %}
               {% if location.owner.id!=app.user.id %}
-              {% if location.members|length < location.capacity %}
+              {% if (location.members|length < location.capacity) and (app.user.roles[0]=="ROLE_USER") %}
               <a href="/location/notif/{{ location.id }}" class="btn btn-info">Demander une place</a>
               {% endif %}
               {% endif %}

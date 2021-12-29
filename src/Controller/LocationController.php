@@ -294,9 +294,10 @@ else{
             
             $demande->setReceiver($user);
             
-            $location = $this->getDoctrine()->getRepository(Location::class)->find('4');
+            // $location = $this->getDoctrine()->getRepository(Location::class)->find('4');
+            // $demande->setLocation($location);
             $demande->setDate(new \DateTime('now'));
-            $demande->setLocation($location);
+            
             $demande->setIsAccept(true);    
             $demande->setAck(69);
             $entityManager = $this->getDoctrine()->getManager();
@@ -354,6 +355,7 @@ function new (Request $request) {
         ->add('titre', TextType::class, array('attr' => array('class' => 'form-control')))
         ->add('dispo_date', DateType::class, array('attr' => array('class' => 'form-control')))
         ->add('capacity', IntegerType::class, array('attr' => array('class' => 'form-control')))
+        ->add('price', IntegerType::class, array('attr' => array('class' => 'form-control')))
         ->add('description', TextareaType::class, array('attr' => array('class' => 'form-control')))
         ->add('images', FileType::class,[
             'label' => false,
@@ -405,12 +407,38 @@ function edit(Request $request, $id)
     $location = new Location();
     $location = $this->getDoctrine()->getRepository(Location::class)->find($id);
     $form = $this->createFormBuilder($location)
-        ->add('titre', TextType::class, array('attr' => array('class' => 'form-control')))
-        ->add('description', TextareaType::class, array('attr' => array('class' => 'form-control')))
-        ->add('save', SubmitType::class, array('label' => 'Enregistrer', 'attr' => array('class' => 'btn btn-primary mt-3')))
-        ->getForm();
+    ->add('titre', TextType::class, array('attr' => array('class' => 'form-control')))
+    ->add('dispo_date', DateType::class, array('attr' => array('class' => 'form-control')))
+    ->add('capacity', IntegerType::class, array('attr' => array('class' => 'form-control')))
+    ->add('price', IntegerType::class, array('attr' => array('class' => 'form-control')))
+    ->add('description', TextareaType::class, array('attr' => array('class' => 'form-control')))
+    ->add('images', FileType::class,[
+        'label' => false,
+        'multiple' => true,
+        'mapped' => false,
+        'required' => false
+    ])
+    ->add('save', SubmitType::class, array('label' => 'Ajouter', 'attr' => array('class' => 'btn btn-primary mt-3')))
+    ->getForm();
     $form->handleRequest($request);
-    if ($form->isSubmitted() && $form->isValid()) {
+    if ($form->isSubmitted() && $form->isValid()) {$images = $form->get('images')->getData();
+    
+      // On boucle sur les images
+      foreach($images as $image){
+          // On génère un nouveau nom de fichier
+          $fichier = md5(uniqid()).'.'.$image->guessExtension();
+          
+          // On copie le fichier dans le dossier uploads
+          $image->move(
+              $this->getParameter('images_directory'),
+              $fichier
+          );
+          
+          // On crée l'image dans la base de données
+          $img = new Images();
+          $img->setName($fichier);
+          $location->addImage($img);
+      }
 
         $entityManager = $this->getDoctrine()->getManager();
 

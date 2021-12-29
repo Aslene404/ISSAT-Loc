@@ -55,6 +55,11 @@ class Location
      */
     private $demandes;
 
+    /**
+     * @ORM\Column(type="bigint", nullable=true)
+     */
+    private $price;
+
     public function __construct()
     {
         $this->members = new ArrayCollection();
@@ -212,6 +217,18 @@ class Location
                 $demande->setLocation(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getPrice(): ?string
+    {
+        return $this->price;
+    }
+
+    public function setPrice(?string $price): self
+    {
+        $this->price = $price;
 
         return $this;
     }

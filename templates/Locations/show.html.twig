@@ -11,6 +11,7 @@
  <h3>Crée Par : <br>{{ location.owner.firstname }} {{ location.owner.lastname }}</h3>
  <hr>
  <h4>Capacité Maximale : <br>{{ location.capacity }}</h4>
+ <h4>Prix par place : <br>{{ location.price / (location.members|length +1)}} DT</h4>
 <hr>
  <p>Description <br>{{ location.description }}</p>
  <hr>
@@ -18,8 +19,14 @@
  {% if location.members %}
  {% for member in location.members %}
           <tr>
-            <td>{{ member.firstname }} {{ member.lastname }} <i class="fas fa-phone"></i> </td>
-            <td>{{ member.mobile }}</td>
+            <td>{{ member.firstname }} {{ member.lastname }} <i class="fa fa-phone"></i> </td>
+            <td>Tel : {{ member.mobile }}</td>
+            <td>
+            <form action="/location/messages/add/{{member.id}}" method="GET">
+            
+           <input type="submit" name="Envoyer" value="Envoyer un message à {{ member.firstname }} {{ member.lastname }} " class="btn btn-success">
+           </form>
+           <td>
             
           </tr>
         {% endfor %}
