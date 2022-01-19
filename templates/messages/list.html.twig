@@ -4,7 +4,12 @@
 {% block title %}Boite de réception{% endblock %}
 
 {% block body %}
-<a href="/location/contacts" class="nav-link"> < Contacts</a>
+<form  action="/location/messages/add/{{ app.request.get('id') }}" method="GET">     
+           <input style="text-align: right; float: right;" type="submit" name="Envoyer" value="Nouveau message" class="btn btn-success">
+           </form>
+<a href="/location/contacts" class="btn btn-info"> < Contacts</a>
+
+
   {% if messages %}
     <table id="messages" class="table table-striped">
       
@@ -13,15 +18,21 @@
         {% for message in messages %}
         {% if message.receiver==app.user %}
         <tr class="table-primary">
-            <td>{{ message.date|format_datetime() }} === > {{ message.content }}</td>
+            <td><img src="/149071.png" width="5%" 
+     height="5%">
+     {{ message.sender.firstname }} {{ message.sender.lastname }}
+            <p>{{ message.date|format_datetime() }} === > {{ message.content }}</p></td>
             
           </tr>
           {% endif %} 
           {% if message.sender==app.user %}
           <tr align="right" class="table-dark">
             
-            <td>{{ message.content }} < === {{ message.date|format_datetime() }}</td>
-            
+            <td>{{ message.sender.firstname }} {{ message.sender.lastname }}<img src="/149071.png" width="5%" 
+     height="5%">
+          <p>
+            {{ message.content }} < === {{ message.date|format_datetime() }}</td>
+          </p>
           </tr>
             
           {% endif %} 

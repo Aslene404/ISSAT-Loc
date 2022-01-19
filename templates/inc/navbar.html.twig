@@ -9,7 +9,7 @@
 
   <div class="collapse navbar-collapse" id="mobile-nav">
     <ul class="navbar-nav ml-auto">
-    {% if app.user %}
+    {% if app.user and app.user.isVerfied %}
       <li class="nav-item">
         <a href="/" class="nav-link">Acceuil</a>
          <li class="nav-item">
@@ -80,6 +80,7 @@
       
       
       {% else %}
+      
       <li class="nav-item ">
         <a href="/" class="nav-link">Acceuil</a>
          
@@ -90,6 +91,11 @@
        <li class="nav-item">
         <a href="/login" class="nav-link">Connexion</a>
       </li>
+      {% if app.user %}
+      {% if not app.user.isVerfied %}
+      <p style="color:orange;">Veuillez activer votre compte via Email.</p>
+      {% endif %}
+      {% endif %}
       {% endif %}
       
 

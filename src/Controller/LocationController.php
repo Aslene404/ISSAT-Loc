@@ -243,6 +243,47 @@ else{
 
     }
     /**
+     * @Route("/activate/{id}", name="activate")
+     * @Method({"GET"})
+     */
+    public function activate_account(FlashyNotifier $flashy,$id,MailerInterface $mailer)
+    {
+
+
+        
+
+        $entityManager = $this->getDoctrine()->getManager();
+        $user = $this->getDoctrine()->getRepository(User::class)->find($id);
+        $user->setIsVerfied(true);
+        $entityManager->flush();
+        $mj = new \Mailjet\Client('d334e66ed2f7cdce808c166ec3a0facb','9bac980f8d57b26ebe3ea8a0fd71ec9c',true,['version' => 'v3.1']);
+  $body = [
+    'Messages' => [
+      [
+        'From' => [
+          'Email' => "aslenerazor@gmail.com",
+          'Name' => "Issat Co-Location"
+        ],
+        'To' => [
+          [
+            'Email' => $user->getEmail(),
+            'Name' => $user->getFirstname(),
+          ]
+        ],
+        'Subject' => "Succés d'activation.",
+        'TextPart' => "My first Mailjet email",
+        'HTMLPart' => "<h3>Votre compte sur notre platforme Issat Co-Location a été activé avec succés <a href='http://127.0.0.1:8000/login'>Vous pouvez vous connecter ici </a>!</h3>",
+        'CustomID' => "AppGettingStartedTest"
+      ]
+    ]
+  ];
+  $response = $mj->post(Resources::$Email, ['body' => $body]);
+        $flashy->success('Compte activé avec succés');
+        return $this->redirectToRoute('home');
+        
+
+    }
+    /**
      * @Route("/location/contacts",name="contacts")
      * @Method({"GET"})
      */
@@ -327,7 +368,7 @@ else{
   $response = $mj->post(Resources::$Email, ['body' => $body]);
   $response->success() && var_dump($response->getData());
             $flashy->success('Message envoyé avec success');
-            return $this->redirectToRoute('contacts');
+            return $this->redirect("/location/messages/{$message->getReceiver()->getId()}");
         }
         return $this->render("messages/new.html.twig", array('form' => $form->createView()));
 

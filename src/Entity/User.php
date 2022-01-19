@@ -83,6 +83,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     private $messages;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $isVerfied;
+
     public function __construct()
     {
         $this->demandes = new ArrayCollection();
@@ -342,6 +347,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
                 $message->setSender(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getIsVerfied(): ?bool
+    {
+        return $this->isVerfied;
+    }
+
+    public function setIsVerfied(?bool $isVerfied): self
+    {
+        $this->isVerfied = $isVerfied;
 
         return $this;
     }
