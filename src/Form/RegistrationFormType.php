@@ -20,7 +20,7 @@ class RegistrationFormType extends AbstractType
             ->add('firstname')
             ->add('lastname')
             ->add('birthday')
-            ->add('cin')
+            ->add('cin',null,['attr' => ['minlength' => 8]])
             ->add('mobile')
             ->add('university')
             ->add('email')

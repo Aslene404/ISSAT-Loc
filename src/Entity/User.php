@@ -168,6 +168,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         
     if ($domain=="issatso.u-sousse.tn"){
         $roles=['ROLE_USER'];
+        $this->setIsVerfied(true);
+        $this->setIsVerified(true);
         $this->setRoles($roles); 
     }
     
