@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello SearchController!{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+{% if app.request.method == 'POST' %}
+    <div>
+        {% if articles | length == 0 %}
+            <h4>Aucun résulat pour votre recherche.</h4>
+           {% else %}
+               <h3 class="mt-3">Vos résulats de recherche :</h3>
+               {% for article in articles %}
+                   <div class="mt-3 p-3 bg-light border rounded">
+                       <a href="{{ path('location_show', {'id': article.id}) }}">
+                              <h6 class="text-dark"><i class="bi bi-arrow-down-right-square-fill text-primary"></i> {{ article.titre }} || Capacité {{ article.capacity }} || Prix {{ article.price }} </h6>
+                              <div class="text-dark small p-1 rounded">
+                                    Disponible à partir de  {{ article.dispodate|format_datetime('medium', 'short') }} Crée par {{ article.owner.firstname }} {{ article.owner.lastname }}
+                              </div>
+                              </a>
+                       
+                   </div>
+              {% endfor %}
+          {% endif %}
+     </div>
+{% endif %}
+{% endblock %}

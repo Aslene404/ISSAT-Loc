@@ -3,7 +3,9 @@
 {% block title %}{{ location.titre }}{% endblock %}
 
 {% block body %}
-
+{% if (location.members|length < location.capacity) and (app.user.roles[0]=="ROLE_USER") %}
+              <a href="/location/notif/{{ location.id }}" class="btn btn-info">Demander une place</a>
+              {% endif %}
  <h1>{{ location.titre }}</h1>
  <hr>
  <h2>Disponible à partir de {{ location.dispodate|date('Y-m-d') }}</h2> 

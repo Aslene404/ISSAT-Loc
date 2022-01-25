@@ -47,4 +47,27 @@ class LocationRepository extends ServiceEntityRepository
         ;
     }
     */
+    // Find/search articles by title/content
+    public function findArticlesByName(string $query)
+    {
+        $qb = $this->createQueryBuilder('p');
+        $qb
+            ->where(
+                $qb->expr()->andX(
+                    $qb->expr()->orX(
+                        $qb->expr()->like('p.titre', ':query'),
+                        $qb->expr()->like('p.description', ':query'),
+                        
+                        $qb->expr()->like('p.capacity', ':query'),
+                        $qb->expr()->like('p.price', ':query'),
+                    ),
+                    $qb->expr()->isNotNull('p.dispo_date')
+                )
+            )
+            ->setParameter('query', '%' . $query . '%')
+        ;
+        return $qb
+            ->getQuery()
+            ->getResult();
+    }
 }

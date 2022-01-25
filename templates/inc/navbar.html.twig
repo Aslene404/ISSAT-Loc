@@ -19,6 +19,9 @@
       <li class="nav-item">
         <a href="/location/new" class="nav-link">Nouvelle Location</a>
         </li>
+        <li class="nav-item">
+        <a href="/location/man" class="nav-link">Mes Locations</a>
+        </li>
         {% endif %}
         {% if app.user.roles[0]=="ROLE_ADMIN" %}
       <li class="nav-item">
@@ -76,6 +79,10 @@
       <li class="nav-item">
         <a href="{{ path('app_logout') }}" class="nav-link">Déconnexion</a> 
       </li>
+      <li>{{ render(controller(
+        'App\\Controller\\SearchController::searchBar'
+ )) }}
+ </li>
       
       
       

@@ -242,6 +242,36 @@ else{
         
 
     }
+    
+    /**
+     * @Route("/location/man", name="man_loc")
+     * @Method({"GET"})
+     */
+    public function man_loc()
+    {
+
+
+        
+
+        $entityManager = $this->getDoctrine()->getManager();
+        
+        $user_c = $this->security->getUser();
+
+        
+        
+        $query = $entityManager->createQuery(
+            'SELECT p
+            FROM App\Entity\Location p
+            WHERE p.owner=:user
+            ORDER BY p.dispo_date ASC'
+        )->setParameter('user', $user_c);
+
+        // returns an array of Product objects
+        $locations= $query->getResult();
+        return $this->render('Locations/index.html.twig', array('locations' => $locations));
+        
+
+    }
     /**
      * @Route("/activate/{id}", name="activate")
      * @Method({"GET"})
