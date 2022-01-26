@@ -390,7 +390,7 @@ else{
         ],
         'Subject' => "Nouveau Message.",
         'TextPart' => "My first Mailjet email",
-        'HTMLPart' => "<h3>Vous avez une nouvelle notification sur notre platforme Issat Co-Location vous pouvez consulter vos messages <a href='http://127.0.0.1:8000/location/contacts/'>Ici</a>!</h3>",
+        'HTMLPart' => "<h3>Vous avez une nouvelle notification sur notre platforme Issat Co-Location vous pouvez consulter vos messages <a href='http://127.0.0.1:8000/location/messages/{$message->getSender()->getId()}'>Ici</a>!</h3>",
         'CustomID' => "AppGettingStartedTest"
       ]
     ]

@@ -21,7 +21,7 @@ class RegistrationFormType extends AbstractType
             ->add('lastname')
             ->add('birthday')
             ->add('cin',null,['attr' => ['minlength' => 8]])
-            ->add('mobile')
+            ->add('mobile',null,['attr' => ['minlength' => 8]])
             ->add('university')
             ->add('email')
             ->add('agreeTerms', CheckboxType::class, [
